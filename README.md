@@ -42,3 +42,15 @@ Below is a snapshot of ERD used to organize information collected from various o
 ![plot](./images/rpdr-schema.png)
 
 ## Visualizations & Applications
+
+### RuPaul's Drag Queens
+
+Drag...but make it like sports. I used **reactablefmtr** to generate an HTML table detailing information on season contestants and their respective outcomes. The interactive version is hosted [here](https://www.tanyashapiro.com/interactive-visuals/rpdr) on my site.
+<br/><br/>
+![plot](./images/drag-queens.png)
+
+### RuPaul's Lip Syncs
+
+In addition to producing visuals, I wanted to make a master playlist of all lip sync songs featured on various episodes of Drag Race. Using lip sync data collected from different season Wikipedias, I then used spotifyR to lookup their respective Spotify track IDs and add them to my own [playlist](https://open.spotify.com/playlist/1FN5Vh8bWSO3FoQFZr5lIA?si=J2sPjNl9RCO7eTlAEFDUWA&nd=1). The result - I now have 300+ songs and 20hrs worth of lip sync songs to shuffle through!
+
+
