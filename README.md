@@ -9,7 +9,13 @@ Excerpts about Drag Race from [Wikipedia](https://en.wikipedia.org/wiki/Drag_Rac
 
 ## Data Collection
 
-The majority of this project's data was sourced from Wikipedia & [RuPaul's Fandom Wiki](https://rupaulsdragrace.fandom.com/wiki/RuPaul%27s_Drag_Race_Wiki). Web scraping was conducted in R using **rvest**. Additional data processing was needed to normalize and clean the data. Majority of these steps were performed using functions within **tidyverse** library (e.g. dplyr, stringr). To supplement data collected from these sites, I also used **[spotifyR](https://www.rcharlie.com/spotifyr/)**, a Spotify API wrapper for R, to collect additional song information for songs featured on different drag shows (lip sync songs). Important to note, in order to use spotifyR, a user must have create a [Spotify Developer](https://developer.spotify.com/) account. Details such as client ID and client ID secret are needed in order to authorize the app and generate an access token.
+### Web Scraping
+The majority of this project's data was sourced from Wikipedia & [RuPaul's Fandom Wiki](https://rupaulsdragrace.fandom.com/wiki/RuPaul%27s_Drag_Race_Wiki). Web scraping was conducted in R using **[rvest](https://rvest.tidyverse.org/)**. Rvest is similar to BeautifulSoup (Python) in that it allows users to read and parse HTML code. Most of the scraping code employs different for loops to iterate through different web pages (e.g. each season has a separate Wikipedia page). After scraping the information, I used tidyverse libraries to normalize and clean the data (e.g. dplyr, stringr).
+
+### Spotify
+To supplement data collected from these sites, I also used **[spotifyR](https://www.rcharlie.com/spotifyr/)**, a Spotify API wrapper for R, to collect additional data points for songs featured on different drag shows (lip sync songs). These data points include audio features defined by Spotify such as **valence**, **danceability**, and **speechiness**. More details about Spotify audio features can be found in [Spotify's developer documentation](https://developer.spotify.com/documentation/web-api/reference/#/operations/get-audio-features). 
+
+Important to note, in order to use spotifyR, a user must have create a [Spotify Developer](https://developer.spotify.com/) account. Details such as client ID and client ID secret are needed in order to authorize the app and generate an access token.
 
 ### Tables & Information Sources
 
@@ -37,9 +43,7 @@ The majority of this project's data was sourced from Wikipedia & [RuPaul's Fando
 
 ## Data Model
 
-Below is a snapshot of ERD used to organize information collected from various online sites. The objective is to normalize the data to scale it to accomodate different Drag Race shows and competition formats. ERD diagram was rendedered using [dbdiagram](https://dbdiagram.io/).
-
-**Note: Model is mostly conceptual. Data collection for certain table is still underway (e.g. judge, episode_judge).
+Below is a snapshot of ERD used to organize information collected from various online sites. The objective is to normalize the data to scale it to accomodate different Drag Race shows and competition formats. ERD diagram was rendedered using [dbdiagram](https://dbdiagram.io/). Note: Model is  conceptual. Data collection for certain table is still in progress (e.g. judge, episode_judge).
 
 ![plot](./images/rpdr-schema.png)
 
@@ -47,13 +51,15 @@ Below is a snapshot of ERD used to organize information collected from various o
 
 ### RuPaul's Drag Queens
 
-Drag...but make it like sports. I used **reactablefmtr** to generate an HTML table detailing information on season contestants and their respective outcomes. The interactive version is hosted [here](https://www.tanyashapiro.com/interactive-visuals/rpdr) on my site.
+Drag...but make it like sports. I used **[reactablefmtr](https://kcuilla.github.io/reactablefmtr/)** to generate an HTML table detailing information on season contestants and their respective outcomes. The interactive version is hosted [here](https://www.tanyashapiro.com/interactive-visuals/rpdr) on my site.
 <br/><br/>
 ![plot](./images/drag-queens.png)
 
 ### RuPaul's Lip Syncs (Spotify Playlist)
 
-In addition to producing visuals, I wanted to make a master playlist of all lip sync songs featured on various episodes of Drag Race. Using lip sync data collected from different season Wikipedias, I then used spotifyR to lookup their respective Spotify track IDs and add them to my own [playlist](https://open.spotify.com/playlist/1FN5Vh8bWSO3FoQFZr5lIA?si=J2sPjNl9RCO7eTlAEFDUWA&nd=1). The result - I now have 300+ songs and 20hrs worth of lip sync songs to shuffle through!
+In addition to producing visuals, I wanted to make a master playlist of all lip sync songs featured on various episodes of Drag Race. Using lip sync data collected from different season Wikipedias, I then used spotifyR to lookup their respective Spotify track IDs and add them to my own playlist. The result - I now have 300+ songs and 20hrs worth of lip sync songs to shuffle through! 
+
+:headphones: [RuPaul Lip Syncs Playlist](https://open.spotify.com/playlist/1FN5Vh8bWSO3FoQFZr5lIA?si=J2sPjNl9RCO7eTlAEFDUWA&nd=1)
 
 ![plot](./images/drag-playlist.png)
 
