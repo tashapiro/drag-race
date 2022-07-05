@@ -39,6 +39,8 @@ The majority of this project's data was sourced from Wikipedia & [RuPaul's Fando
 
 Below is a snapshot of ERD used to organize information collected from various online sites. The objective is to normalize the data to scale it to accomodate different Drag Race shows and competition formats. ERD diagram was rendedered using [dbdiagram](https://dbdiagram.io/).
 
+**Note: Model is mostly conceptual. Data collection for certain table is still underway (e.g. judge, episode_judge).
+
 ![plot](./images/rpdr-schema.png)
 
 ## Visualizations & Applications
