@@ -57,9 +57,9 @@ Drag...but make it like sports. I used **[reactablefmtr](https://kcuilla.github.
 
 ### RuPaul's Lip Sync Palooza (Spotify Playlist)
 
-In addition to producing visuals, I wanted to make a master playlist of all lip sync songs featured on various episodes of Drag Race. Using lip sync data collected from different season Wikipedias, I then used spotifyR to lookup their respective Spotify track IDs and add them to my own playlist. The result - I now have 300+ songs and 20hrs worth of lip sync songs to shuffle through! 
+In addition to producing visuals, I wanted to make a master playlist of all lip sync songs featured on various episodes of Drag Race. Using lip sync data collected from different season Wikipedias, I then used spotifyR to lookup their respective Spotify track IDs and add them to my own playlist. The result - I now have 300+ songs and 20+hrs worth of listening time to shuffle through! 
 
 :headphones: [RuPaul Lip Syncs Playlist](https://open.spotify.com/playlist/49xR85Shg0IuVS9xkcfNm6)
 
-
+![plot](./images/drag-playlist.png)
 
