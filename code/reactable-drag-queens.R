@@ -36,9 +36,9 @@ data <- df_sc|>
   mutate(dummy_id = toupper(str_replace_all(contestant," ","")),
          franchise_name = str_replace(franchise_name,"RuPaul's ",""),
          contestant = case_when(contestant=="Ben De La Creme"~"BenDeLaCreme",TRUE ~ contestant),
-         franchise_name = case_when(franchise_name!="Drag Race"~str_replace(franchise_name,"Drag Race",""), TRUE ~ franchise_name),
+         franchise_name = case_when(!franchise_name %in% c("Drag Race","Drag Race vs The World") ~str_replace(franchise_name,"Drag Race",""), TRUE ~ franchise_name),
          franchise_name = str_replace(franchise_name,"'s",""))|>
-  left_join(results, by=c("season_contestant_id"="season_contestant_id"))|>
+  left_join(results, by=c("id"="season_contestant_id"))|>
   mutate(link_fandom = paste0('https://rupaulsdragrace.fandom.com/wiki/',str_replace_all(contestant," ","_")))|>
   select(link_image, contestant, hometown, age, franchise_name, season_num, challenges, rank, btm_perc, low_perc, safe_perc, high_perc, win_perc, link_fandom)|>
   filter(win_perc!="")
@@ -110,4 +110,4 @@ table_html<-htmlwidgets::prependContent(
 
 table_html
 
-saveWidget(table_html, "drag_queens.html", selfcontained=TRUE)
+saveWidget(table_html, "../html/drag_queens.html", selfcontained=TRUE)
