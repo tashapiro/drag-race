@@ -71,7 +71,7 @@ Below is a snapshot of ERD used to organize information collected from various o
 
 Drag...but make it like sports. I used **[reactablefmtr](https://kcuilla.github.io/reactablefmtr/)** to generate an HTML table detailing information on season contestants and their respective outcomes. The interactive version is hosted [here](https://www.tanyashapiro.com/interactive-visuals/rpdr) on my site.
 <br/><br/>
-![plot](./images/drag-queens.png)
+![plot](./images/reactable-drag-queens.png)
 
 ### RuPaul's Lip Sync Palooza (Spotify Playlist)
 
