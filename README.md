@@ -63,7 +63,7 @@ Important to note, in order to use spotifyR, a user must have create a [Spotify 
 
 Below is a snapshot of ERD used to organize information collected from various online sites. The objective is to normalize the data to scale it to accomodate different Drag Race shows and competition formats. ERD diagram was rendedered using [dbdiagram](https://dbdiagram.io/). Note: Model is  conceptual. Data collection for certain table may still be in progress (e.g. judge).
 
-![plot](./images/rpdr-schema.png)
+![plot](./images/drag-schema.png)
 
 ## Visualizations & Applications
 
