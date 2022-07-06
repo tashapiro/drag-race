@@ -37,14 +37,15 @@ Important to note, in order to use spotifyR, a user must have create a [Spotify 
 
 | Dataset                 | Source                         | Description                                       |
 |-------------------------|-------------------------------|---------------------------------------------------|
-| [franchise][d1]         | Wikipedia                      | List of different drag race franchises            |
-| [season][d2]            | Wikipedia                      | List of seasons per franchise               |
-| [episode][d3]           | Wikipedia                      | List of episodes for each season and franchise            |
-| [contestant][d4]        | Wikipedia & Fandom Wiki | List of all contestants       |
-| [season_contestant][d5] | Wikipedia                      | List of contestants per season                    |
-| [episode_outcome][d6]   | Wikipedia & Fandom Wiki                     | List of outcomes per contestant for each episode  |
-| [lip_sync_contestant][d7]| Wikipedia                     | List of lip sync performances per episode & contestant                         |
-| [song][d8]| Wikipedia & Spotify                     | List of all lip sync songs                         |
+| [franchise][d1]         | Wikipedia                      | Drag Race franchises            |
+| [season][d2]            | Wikipedia                      | Seasons per Drag Race franchise               |
+| [episode][d3]           | Wikipedia                      | Episodes for each season and franchise            |
+| [contestant][d4]        | Wikipedia & Fandom Wiki | Contestants (or queens)       |
+| [season_contestant][d5] | Wikipedia                      | Contestants per season                    |
+| [episode_outcome][d6]   | Wikipedia & Fandom Wiki                     | Outcomes per contestant for each episode  |
+| [lip_sync_contestant][d7]| Wikipedia                     | Lip sync performances per episode & contestant                         |
+| [song][d8]| Wikipedia & Spotify                     | Lip sync songs                         |
+| [episode_judge][d9]| Wikipedia                     | Main and guest judges per episode                        |
 
 
 [d1]: data/franchise.csv
@@ -55,6 +56,7 @@ Important to note, in order to use spotifyR, a user must have create a [Spotify 
 [d6]: data/episode_outcome.csv
 [d7]: data/lip_sync_contestant.csv
 [d8]: data/song.csv
+[d9]: data/episode_judge.csv
 
 
 ## Data Model
