@@ -12,6 +12,22 @@ Excerpts about Drag Race from [Wikipedia](https://en.wikipedia.org/wiki/Drag_Rac
 ### Web Scraping
 The majority of this project's data was sourced from Wikipedia & [RuPaul's Fandom Wiki](https://rupaulsdragrace.fandom.com/wiki/RuPaul%27s_Drag_Race_Wiki). Web scraping was conducted in R using **[rvest](https://rvest.tidyverse.org/)**. Rvest is similar to BeautifulSoup (Python) in that it allows users to read and parse HTML code. Most of the scraping code employs different for loops to iterate through different web pages (e.g. each season has a separate Wikipedia page). After scraping the information, I used tidyverse libraries to normalize and clean the data (e.g. dplyr, stringr).
 
+Scraping jobs are partitioned into separate R files:
+
+| **File**     | **Dataset Produced**          |
+|--------------|:------------------------------|
+| [Part 1][p1] | franchise, season             |
+| [Part 2][p2] | season_contestant, contestant |
+| [Part 3][p3] | episode, episode_outcome      |
+| [Part 4][p4] | lip_sync_contestant           |
+| [Part 5][p5] | episode_judge                 |
+
+[p1]: code/scraping-part-1.R
+[p2]: code/scraping-part-2.R
+[p3]: code/scraping-part-3.R
+[p4]: code/scraping-part-4.R
+[p5]: code/scraping-part-5.R
+
 ### Spotify
 To supplement data collected from these sites, I also used **[spotifyR](https://www.rcharlie.com/spotifyr/)**, a Spotify API wrapper for R, to collect additional data points for songs featured on different drag shows (lip sync songs). These data points include audio features defined by Spotify such as **valence**, **danceability**, and **speechiness**. More details about Spotify audio features can be found in [Spotify's developer documentation](https://developer.spotify.com/documentation/web-api/reference/#/operations/get-audio-features). 
 
