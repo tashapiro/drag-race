@@ -81,3 +81,8 @@ In addition to producing visuals, I wanted to make a master playlist of all lip 
 
 ![plot](./images/drag-playlist.png)
 
+### Drag Race HERStory - Lip Syncs
+Analysis of all lip sync songs featured on different seasons of Drag Race across all franchises. 
+<br/><br/>
+![plot](./images/herstory.png)
+
