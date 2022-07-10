@@ -73,6 +73,19 @@ Drag...but make it like sports. I used **[reactablefmtr](https://kcuilla.github.
 <br/><br/>
 ![plot](./images/reactable-drag-queens.png)
 
+
+### Where in The World Are You Queen?
+Where are the queens originally from? I used data from each contestant's original season and used the hometown information to plot the location of each queen. I used **tidygeocoder** to produce the lat/long coordinates for each hometown, and used **leafletR** (Leaflet wrapper) to generate the map. It's pretty cool to see how Ru's family footprint has expanded around the world - you can find queens in North America, South America, Europe, Asia, and Australia!
+
+:round_pushpin: [Find a Queen](https://tashapiro.github.io/drag-race/code/map-queens)
+<br></br>
+![plot](./images/map-queens-usa.png)
+
+### Drag Race HERStory - Lip Syncs
+Analysis of all lip sync songs featured on different seasons of Drag Race across all franchises. 
+<br/><br/>
+![plot](./images/herstory.png)
+
 ### RuPaul's Lip Sync Palooza (Spotify Playlist)
 
 In addition to producing visuals, I wanted to make a master playlist of all lip sync songs featured on various episodes of Drag Race. Using lip sync data collected from different season Wikipedias, I then used spotifyR to lookup their respective Spotify track IDs and add them to my own playlist. The result - I now have 300+ songs and 20+hrs worth of listening time to shuffle through! 
@@ -80,9 +93,3 @@ In addition to producing visuals, I wanted to make a master playlist of all lip 
 :headphones: [RuPaul Lip Syncs Playlist](https://open.spotify.com/playlist/49xR85Shg0IuVS9xkcfNm6)
 
 ![plot](./images/drag-playlist.png)
-
-### Drag Race HERStory - Lip Syncs
-Analysis of all lip sync songs featured on different seasons of Drag Race across all franchises. 
-<br/><br/>
-![plot](./images/herstory.png)
-
