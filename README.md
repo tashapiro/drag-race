@@ -96,7 +96,7 @@ Below is a snapshot of ERD used to organize information collected from various o
 
 Drag...but make it like sports. I used **[reactablefmtr](https://kcuilla.github.io/reactablefmtr/)** to generate an HTML table detailing information on season contestants and their respective outcomes. The interactive version is hosted [here](https://www.tanyashapiro.com/interactive-visuals/rpdr) on my site.
 <br/><br/>
-![plot](./images/reactable-drag-queens.png)
+![plot](./images/plots/reactable-drag-queens.png)
 
 
 ### Where in The World Are You Queen?
@@ -104,12 +104,12 @@ Where are the queens originally from? I used **tidygeocoder** to produce the geo
 
 :round_pushpin: [Find a Queen](https://www.tanyashapiro.com/interactive-visuals/map-drag-queens)
 <br></br>
-![plot](./images/map-queens-global.png)
+![plot](./images/plots/map-queens-global.png)
 
 ### Drag Race HERStory - Lip Syncs
 Analysis of all lip sync songs featured on different seasons of Drag Race across all franchises. 
 <br/><br/>
-![plot](./images/herstory.png)
+![plot](./images/plots/song-herstory.png)
 
 ### RuPaul's Lip Sync Palooza (Spotify Playlist)
 
