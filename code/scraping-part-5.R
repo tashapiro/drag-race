@@ -26,7 +26,7 @@ for(row in 1:nrow(df_franchise)){
   url <- as.character(df_franchise[row,"link_wiki"])
   franchise_id <- as.character(df_franchise[row,"id"])
   #no judge information table for some seasons, exclude from loop
-  if(!franchise_id %in% c("F18", "F19","F20","F21")){
+  if(!franchise_id %in% c("F19","F20","F23","F21","F24","F25","F22")){
   #print for troubleshooting purposes
   print(franchise_id)
   #grab data, dump in temporary dataframe object

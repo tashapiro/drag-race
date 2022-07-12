@@ -9,7 +9,7 @@ df_season<-read.csv("../data/season.csv")|>mutate(premiere_date = as.Date(premie
 df_sc<-read.csv("../data/season_contestant.csv")|>mutate(dummy_id = toupper(str_replace_all(contestant," ","")))
 
 #filter data set to completed seasons only based on finale date
-df_season_subset<-df_season|>filter(!is.na(finale_date))
+df_season_subset<-df_season|>filter(!is.na(finale_date) & franchise_id!="F12")
 
 #Create Episodes Dataframe ----
 get_episodes<-function(url){
@@ -23,10 +23,10 @@ get_episodes<-function(url){
    names(data)<-c("episode_num","season_episode_num","title","air_date","description")
    
   #reshape data
-  df<-data|>
+  df<-data%>%
     filter(is.na(description))|>
     select(-description)|>
-    cbind(data|>filter(!is.na(description))|>select(description))|>
+    cbind(data|>filter(!is.na(description))|>select(description))
     
   df
 }
@@ -34,8 +34,9 @@ get_episodes<-function(url){
 
 #Scraping for all franchises except F19 (Drag Race vs The World) - different format ----
 df_episodes <- data.frame()
-for(row in 1:nrow(df_season_subset%>%filter(id!="F19S01"))){
+for(row in 1:nrow(df_season_subset%>%filter(id!= c("F20S01")))){
   url <- df_season_subset[row,"link_wiki"]
+  id <- df_season_subset[row,"id"]
   df_temp <- get_episodes(url)
   df_temp$season_id <-df_season_subset[row,"id"]
   df_temp$franchise_id <- df_season_subset[row,"franchise_id"]
@@ -43,25 +44,27 @@ for(row in 1:nrow(df_season_subset%>%filter(id!="F19S01"))){
 }
 
 #get UK vs. The World Seperately for episodes
-f19s01<-"https://en.wikipedia.org/wiki/RuPaul%27s_Drag_Race:_UK_vs_the_World"%>%
+f20s01<-"https://en.wikipedia.org/wiki/RuPaul%27s_Drag_Race:_UK_vs_the_World"%>%
   read_html()%>%
   html_elements("table.wikiepisodetable")%>%
   .[[1]]%>%
   html_table()
 
-names(f19s01)<-c("episode_num","title","air_date","viewers","description")
+names(f20s01)<-c("episode_num","title","air_date","viewers","description")
 
-f19s01<-f19s01|>
+f20s01<-f20s01|>
   filter(is.na(description))|>
   select(-description)|>
-  cbind(f19s01|>filter(!is.na(description))|>select(description))|>
+  cbind(f20s01|>filter(!is.na(description))|>select(description))|>
   mutate(season_episode_num=episode_num,
-         franchise_id = "F19",
-         season_id = "F19S01")|>
+         franchise_id = "F20",
+         season_id = "F20S01")|>
   select(episode_num, season_episode_num, title, air_date, description, season_id, franchise_id)
 
-df_episodes<-rbind(df_episodes, f19s01)|>
-  mutate(air_date = as.Date(str_sub(air_date, -11, -2)),
+df_episodes<-rbind(df_episodes, f20s01)|>
+  mutate(air_date = str_replace(air_date, "\\s*\\[[^\\)]+\\]",""),
+         title = str_replace(title, "\\s*\\[[^\\)]+\\]",""),
+         air_date = as.Date(str_sub(air_date, -11, -2)),
          episode_num = as.integer(episode_num),
          season_epispde_num = as.integer(season_episode_num),
          id= case_when(season_epispde_num<10 ~ paste0(season_id,"E0",season_epispde_num), TRUE ~ paste0(season_id,"E",season_epispde_num))
@@ -104,7 +107,7 @@ for(row in 1:nrow(df_season_subset)){
   url<-as.character(df_season_subset[row, "link_fandom"])
   print(season_id)
   #if show is All Stars or vs The World, table index is different (2), otherwise use 1
-  if(franchise_id %in% c("F11","F19")){
+  if(franchise_id %in% c("F11","F20")){
     temp_outcomes<-get_season_outcomes(url,2)
   }
   else{temp_outcomes<-get_season_outcomes(url,1)}

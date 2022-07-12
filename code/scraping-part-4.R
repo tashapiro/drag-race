@@ -7,6 +7,7 @@ library(httr)
 #import season data from previous scraping job (part 1)
 df_season<-read.csv("../data/season.csv")|>mutate(premiere_date = as.Date(premiere_date), finale_date = as.Date(finale_date))
 df_sc<-read.csv("../data/season_contestant.csv")|>mutate(dummy_id = toupper(str_replace_all(contestant," ","")))
+df_episodes<-read.csv("../data/episode.csv")|>mutate(air_date = as.Date(air_date))
 
 #filter data set to completed seasons only based on finale date
 df_season_subset<-df_season|>filter(!is.na(finale_date))
@@ -20,8 +21,9 @@ get_ls<-function(url,index){
     html_table()
 }
 
-#Get Lip Syncs for all seasons that don't belong to all stars franchise (different table set up)
-sub1<-df_season_subset|>filter(franchise_id !="F11")
+#Get Lip Syncs for all seasons that don't belong to all stars franchise or global (F11, F20, different table set up)
+#The Switch Drag Race (F12) does not have lip syncs in a wikitable
+sub1<-df_season_subset|>filter(!franchise_id %in% c("F11","F12","F20"))
 
 ls1 <- data.frame()
 for(row in 1:nrow(sub1)){
@@ -51,7 +53,7 @@ ls1<-ls1|>
   select(episode_id, season_id, contestant, song, artist, outcome)
 
 #Get All Stars Lip Syncs
-sub2<-df_season_subset|>filter(franchise_id=="F11")
+sub2<-df_season_subset|>filter(franchise_id %in% c("F11","F20"))
 
 ls2 <- data.frame()
 for(row in 1:nrow(sub2)){
@@ -86,12 +88,15 @@ ls2<-ls2|>
 
 #combine two subsets to create lip sync dataframe (df_ls)
 df_ls<-rbind(ls1,ls2)
+
+test<-df_ls|>left_join(df_episodes|>select(id, air_date), by=c("episode_id"="id"))|>arrange(air_date)
 #create lip sync battle ids
 ls_eps<-df_ls|>left_join(df_episodes|>select(id, air_date), by=c("episode_id"="id"))|>arrange(air_date)|>distinct(episode_id, song, artist)
 ls_eps$id<-paste0("LS",100:(100+nrow(ls_eps)-1))
-#create list of songs and ids
+
 songs<-ls_eps|>distinct(song,artist)
 songs$id<-paste0("S",100:(100+nrow(songs)-1))
+
 
 df_ls<-df_ls|>
   left_join(ls_eps|>select(-artist), by=c("episode_id"="episode_id","song"="song"))|>

@@ -6,7 +6,6 @@ library(httr)
 #SCRAPING SHOWS
 
 #Initial Scraping ----
-
 #urls for RuPaul's Drag Race Franchise information - Wikipedia & Fandom 
 url_wiki <-'https://en.wikipedia.org/wiki/Drag_Race_(franchise)'
 url_fandom<-'https://rupaulsdragrace.fandom.com/wiki/Drag_Race_(Franchise)'
@@ -41,15 +40,17 @@ df_franchise<-table_franchise|>
     status = case_when(premier_date == "TBA"~ "TBA", TRUE ~ status),
     premier_date = str_replace(premier_date, "\\s*\\[[^\\)]+\\]",""),
     premier_date = as.Date(premier_date, "%B %d, %Y"),
-    link_wiki = case_when(is.na(link_wiki) ~ "", TRUE ~ paste0("https://en.wikipedia.org",link_wiki))
+    link_wiki = case_when(is.na(link_wiki) ~ "", TRUE ~ paste0("https://en.wikipedia.org",link_wiki)),
+    link_fandom = case_when(grepl("The World", name) ~ "https://rupaulsdragrace.fandom.com/wiki/Drag_Race_vs_The_World",
+                            TRUE ~ paste0("https://rupaulsdragrace.fandom.com/wiki/",str_replace_all(str_replace_all(name," ","_"),"\\'","%27"))
+    )
   )|>
   arrange(premier_date, name)|>
-  filter(status!="TBA" & !name %in% c("RuPaul's Secret Celebrity Drag Race"))
+  filter(!name %in% c("RuPaul's Secret Celebrity Drag Race"))
 
 #assign unique IDs per franchise
 df_franchise$id<-paste0("F",10:(10+nrow(df_franchise)-1))
-df_franchise<-df_franchise|>select(id, name, region, premier_date, status, link_wiki)
-df_franchise$link_fandom<-paste0("https://rupaulsdragrace.fandom.com/wiki/",str_replace_all(str_replace_all(df_franchise$name," ","_"),"\\'","%27"))
+df_franchise<-df_franchise|>select(id, name, region, premier_date, status, link_wiki, link_fandom)
 
 
 #Helper Function to scrape additional contestant information stored on Drag Queen profiles on Fandom Wiki
@@ -83,8 +84,14 @@ df_season<-table_franchise|>
   inner_join(df_franchise%>%select(id, name, link_wiki, link_fandom), by=c("name"))|>
   rename(franchise_id = id, franchise_name = name)|>
   mutate(id = case_when(season_num<10~paste0(franchise_id, "S0",season_num), TRUE ~ paste0(franchise_id, "S",season_num)),
-         link_wiki = paste0(link_wiki,"_(",tolower(str_replace_all(season," ","_")),")"),
-         link_fandom = str_replace(paste0(link_fandom,"_(Season_",season_num,")"),"ñ","%C3%B1"),
+         link_wiki = case_when(
+           id == "F20S01" ~ "https://en.wikipedia.org/wiki/RuPaul%27s_Drag_Race:_UK_vs_the_World",
+           id == "F23S01" ~ "https://en.wikipedia.org/wiki/Canada%27s_Drag_Race:_Canada_vs._the_World",
+           TRUE ~ paste0(link_wiki,"_(",tolower(str_replace_all(season," ","_")),")")),
+         link_fandom = case_when(
+           id == "F20S01" ~ "https://rupaulsdragrace.fandom.com/wiki/RuPaul%27s_Drag_Race_UK_vs_The_World_(Season_1)",
+           id == "F23S01" ~ "https://rupaulsdragrace.fandom.com/wiki/Canada%27s_Drag_Race_vs_The_World_(Season_1)",
+           TRUE ~ str_replace(paste0(link_fandom,"_(Season_",season_num,")"),"ñ","%C3%B1")),
          premiere_date = as.character(lapply(link_fandom, get_panel_info, "premiere")),
          finale_date = as.character(lapply(link_fandom, get_panel_info, "finale"))
   )|>
@@ -96,7 +103,7 @@ df_season<-table_franchise|>
 
 missing<-data.frame(
   id = c("F16S02","F15S02","F15S03","F17S02"),
-  franchise_id = c("f16","F15","F15","F17"),
+  franchise_id = c("F16","F15","F15","F17"),
   franchise_name = c("Drag Race Holland","Canada's Drag Race","Canada's Drag Race","RuPaul's Drag Race Down Under"),
   season = c("Season 2", "Season 2", "Season 3","Season 2"),
   season_num = c(2, 2, 3, 2),

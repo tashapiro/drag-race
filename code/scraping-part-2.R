@@ -224,9 +224,6 @@ for(row in 1:nrow(df_contestants)){
 
 
 
-
-
-
 #df_contestants<- df_contestants|>select(id, original_season_id, name)
 
 final_contestants<-df_contestants|>left_join(contestant_details|>select(-name, -ethnicity), by="id")|>
