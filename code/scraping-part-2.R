@@ -1,6 +1,7 @@
 library(tidyverse)
 library(rvest)
 library(httr)
+library(utils)
 
 #SCRAPING CONTESTANTS
 
@@ -9,7 +10,7 @@ df_season<-read.csv("../data/season.csv")
 df_season<-df_season|>mutate(premiere_date = as.Date(premiere_date), finale_date = as.Date(finale_date))
 
 #filter data set to completed seasons only based on finale date
-df_season_subset<-df_season|>filter(!is.na(finale_date))
+df_season_subset<-df_season|>filter(!is.na(premiere_date))
 
 #Function to get contesant information per season. uses data from wikipedia
 get_season_contestants<-function(url, table_index){
@@ -35,29 +36,75 @@ data_sc<-data.frame()
 for(row in 1:nrow(df_season_subset)){
   #use row index to return details like season_id, franchise_id, and url
   season_id<-as.character(df_season_subset[row, "id"])
-  franchise_id<-as.character(df_season_subset[row, "franchise_id"])
-  url<-as.character(df_season_subset[row, "link_wiki"])
-  print(season_id)
-  #if show is All Stars, table index is different (2), otherwise use 1
-  temp_sc<-get_season_contestants(url,1)
-  temp_sc$season_id <- season_id
-  temp_sc$franchise_id <- franchise_id 
-  #append data to df_outcomes
-  data_sc<-rbind(data_sc, temp_sc)
+  #Skip Over The Switch Drag Race F12, wiki table in different format
+  if(!substr(season_id,1,3) %in% c("F12","F122")){
+    franchise_id<-as.character(df_season_subset[row, "franchise_id"])
+    url<-as.character(df_season_subset[row, "link_wiki"])
+    print(season_id)
+    #if show is All Stars, table index is different (2), otherwise use 1
+    temp_sc<-get_season_contestants(url,1)
+    temp_sc$season_id <- season_id
+    temp_sc$franchise_id <- franchise_id 
+    #append data to df_outcomes
+    data_sc<-rbind(data_sc, temp_sc)
+  }
 }
 
+#Add The Switch Contestants
+#Season 1
+sc_tsw1<-'https://en.wikipedia.org/wiki/The_Switch_Drag_Race_(season_1)'%>%
+  read_html()%>%
+  html_elements("table.wikitable")%>%
+  .[[1]]%>%
+  html_table()%>%
+  rename(Hometown = `Country of Origin`,Contestant=1)%>%
+  mutate(franchise_id = "F12", season_id="F12S01")%>%
+  select(Contestant, Hometown, Age, Outcome, season_id, franchise_id)
 
+#Season 2
+sc_tsw2<-'https://en.wikipedia.org/wiki/The_Switch_Drag_Race_(season_2)'%>%
+  read_html()%>%
+  html_elements("table.wikitable")%>%
+  .[[1]]%>%
+  html_table()%>%
+  rename(Hometown = `Country of Origin`,Contestant=1)%>%
+  mutate(franchise_id = "F12", season_id="F12S02")%>%
+  select(Contestant, Hometown, Age, Outcome, season_id, franchise_id)
+
+#Combine The Switch S1 & 2 Season Contestants
+sc_tsw<-rbind(sc_tsw1, sc_tsw2)
+names(sc_tsw)<-tolower(names(sc_tsw))
+#clean up dataframe
+sc_tsw<-sc_tsw%>%
+  mutate(age = str_replace_all(age, "\\s*\\[[^\\)]+\\]",""),
+         contestant = str_replace_all(contestant, "\\s*\\[[^\\)]+\\]",""),
+         hometown = str_replace_all(hometown, "\\s*\\[[^\\)]+\\]",""),
+         outcome = str_replace_all(outcome, "\\s*\\[[^\\)]+\\]",""))
+  
 #Clean Dataframe for Season Contestants
 df_sc<-data_sc|>
+  #add The Switch Contestants
+  rbind(sc_tsw)|>
   distinct(season_id, franchise_id, contestant, hometown, age, outcome)|>
   left_join(df_season|>select(id, link_fandom), by=c("season_id"="id"))|>
   rename(rank = outcome)|>
+  arrange(season_id, contestant)|>
   group_by(season_id)|>
   mutate(temp_id = row_number(),
          season_contestant_id = case_when(temp_id<10 ~ paste0(season_id,"C0",temp_id), TRUE ~ paste0(season_id,"C",temp_id)),
          contestant = str_replace(contestant, "\\s*\\([^\\)]+\\)",""),
          contestant_words = str_count(contestant,"\\S+"),
-         contestant = case_when(contestant_words==1~gsub("([a-z])([A-Z])","\\1 \\2",contestant), TRUE ~ contestant)
+         contestant = case_when(contestant_words==1 & contestant !="BenDeLaCreme"~gsub("([a-z])([A-Z])","\\1 \\2",contestant), 
+                                contestant == 'Sofía "Sabélo" Camará' ~ "Sofía Camará",
+                                contestant == 'Fransiska "Pakita" Tólika' ~ 'Pakita',
+                                contestant == "Kristina Kox" ~ "Veneno", 
+                                contestant == "La Yoyi" ~ "Yoyi", 
+                                contestant == "Rubí Blonde"~ "Rubí",
+                                contestant == "Stephanie Fox" ~ "Botota Fox",
+                                contestant == "Francisca del Solar" ~ "Francisca Del Solar",
+                                contestant == "Divina de Campo" ~ "Divina De Campo",
+                                contestant == "DiDa Ritz" ~ "Dida Ritz",
+                                TRUE ~ contestant)
   )|>
   ungroup()|>
   select(season_contestant_id, season_id, franchise_id, contestant, hometown, age, rank, link_fandom)
@@ -77,15 +124,20 @@ get_image_url<-function(url, drag_queen){
 }
 
 #Some alt text on images does not match contestant name, 
-sc_image_replace <- data.frame(id = c("F10S01C09","F10S04C06","F10S06C05","F10S07C13","F10S08C01","F10S09C11","F10S10C02","F10S10C13","F10S11C03",
-                                      "F10S14C12","F11S03C04","F11S03C06","F11S04C02","F11S05C08","F11S06C02","F11S06C08","F13S01C02","F13S01C08",
-                                      "F15S01C05","F16S01C03"),
-                               image_name = c("Victoria Parker", "Dida Ritz","BenDeLaCreme","Frisbee Jenkins",
-                                              "Bob The Drag Queen","Eureka!","Eureka!","Kalorie Karbdashian-Williams",
-                                              "A'keria Chanel Davenport",'Kornbread Jeté',"Shangela Laquifa Wadley",
-                                              "BenDeLaCreme","Trinity The Tuck","Mariah Balenciaga","Eureka","A'keria Chanel Davenport",
-                                              "Divina De Campo","Vinegar Strokes&NoBreak","ChelseaBoy",
-                                              "Karen From Finance")
+sc_image_replace <- data.frame(id = c("F10S01C09","F10S04C03",
+                                      "F10S07C11","F10S08C02","F10S09C05",
+                                      "F10S10C05","F10S10C06","F10S11C01",
+                                      "F10S14C10","F11S03C08",
+                                      "F11S04C09","F11S05C06","F11S06C02",
+                                      "F11S06C01","F14S01C05","F14S01C10",
+                                      "F16S01C01","F17S01C07"),
+                               image_name = c("Victoria Parker", "Dida Ritz",
+                                              "Frisbee Jenkins","Bob The Drag Queen","Eureka!",
+                                              "Eureka!","Kalorie Karbdashian-Williams","A'keria Chanel Davenport",
+                                              'Kornbread Jeté',"Shangela Laquifa Wadley",
+                                              "Trinity The Tuck","Mariah Balenciaga","Eureka",
+                                              "A'keria Chanel Davenport","Divina De Campo","Vinegar Strokes&NoBreak",
+                                              "ChelseaBoy","Karen From Finance")
 )
 
 #Append Image Names
@@ -100,6 +152,7 @@ for(row in 1:nrow(df_sc)){
   url<-as.character(df_sc[row, "link_fandom"])
   id<-as.character(df_sc[row, "season_contestant_id"])
   queen<-as.character(df_sc[row, "image_name"])
+  print(queen)
   image<-get_image_url(url,queen)
   index<-gregexpr("/revision", image)[[1]][1]
   temp_image <- data.frame(id = id, image = substr(image, 1,index-1))
@@ -112,7 +165,8 @@ df_sc<-df_sc|>left_join(sc_images, by=c("season_contestant_id"="id"))
 #Create Contestants Dataframe ----
 
 #some contestants appear on multiple shows with different names, standardize before creating unique IDs
-name_lookups<-data.frame(sc_id = c("F10S02C09","F11S06C02","F10S09C13"),name = c("Shangela","Eureka","Trinity the Tuck"))
+name_lookups<-data.frame(sc_id = c("F10S02C09","F11S06C02","F10S09C13","F10S10C11","F11S04C07","F10S02C10"),
+                         name = c("Shangela","Eureka","Trinity the Tuck","Mo Heart","Mo Heart","Kylie Sonique Love"))
 
 
 df_contestants<-df_sc|>
@@ -132,6 +186,7 @@ df_contestants$id<-paste0("Q",100:(100+nrow(df_contestants)-1))
 
 #HELPER FUNCTION - get panel information from Fandom Wiki
 get_panel_info<-function(url, var){
+  url=URLencode(url)
   if(http_error(url)){"Bad URL"}
   else{
     path =  paste0('//*[@data-source="', var,'"]') 
@@ -167,9 +222,15 @@ for(row in 1:nrow(df_contestants)){
   contestant_details <- rbind(contestant_details, temp_details)
 }
 
+
+
+
+
+
 #df_contestants<- df_contestants|>select(id, original_season_id, name)
 
-
+final_contestants<-df_contestants|>left_join(contestant_details|>select(-name, -ethnicity), by="id")|>
+  select(id, name, original_season_id, real_name, dob, gender, hometown, location)
 
 
 #Adjust Season Contestants to include Contestant ID
@@ -183,5 +244,5 @@ df_sc<-df_sc|>
          id = season_contestant_id)
 
 
-write.csv(df_sc, "../data/season_contestant.csv")
-write.csv(df_contestants, "../data/contestant.csv")
+write.csv(df_sc, "../data/season_contestant.csv" , row.names=FALSE)
+write.csv(final_contestants, "../data/contestant.csv", row.names=FALSE)

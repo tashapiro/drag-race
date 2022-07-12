@@ -44,7 +44,7 @@ df_franchise<-table_franchise|>
     link_wiki = case_when(is.na(link_wiki) ~ "", TRUE ~ paste0("https://en.wikipedia.org",link_wiki))
   )|>
   arrange(premier_date, name)|>
-  filter(status!="TBA" & !name %in% c("RuPaul's Secret Celebrity Drag Race","The Switch Drag Race"))
+  filter(status!="TBA" & !name %in% c("RuPaul's Secret Celebrity Drag Race"))
 
 #assign unique IDs per franchise
 df_franchise$id<-paste0("F",10:(10+nrow(df_franchise)-1))
@@ -78,7 +78,7 @@ df_season<-table_franchise|>
   separate(winners, into= c("season", "winner"), sep=": ")|>
   separate(season, into=c("season","season_year"), sep=", ")|>
   mutate(season_year = case_when(grepl("-",season_year)~substr(season_year,6,10),TRUE ~ season_year),
-         season_year = as.integer(season_year),
+         season_year = as.integer(substr(season_year,1,4)),
          season_num = as.integer(str_replace(season,"Season|Series","")))|>
   inner_join(df_franchise%>%select(id, name, link_wiki, link_fandom), by=c("name"))|>
   rename(franchise_id = id, franchise_name = name)|>
@@ -92,6 +92,22 @@ df_season<-table_franchise|>
          finale_date = as.Date(str_replace_all(finale_date, "Friday, ",""),"%B %d, %Y"))|>
   select(id, franchise_id, franchise_name, season, season_num, season_year, premiere_date, finale_date, link_wiki, link_fandom)|>
   arrange(id)
+
+
+missing<-data.frame(
+  id = c("F16S02","F15S02","F15S03","F17S02"),
+  franchise_id = c("f16","F15","F15","F17"),
+  franchise_name = c("Drag Race Holland","Canada's Drag Race","Canada's Drag Race","RuPaul's Drag Race Down Under"),
+  season = c("Season 2", "Season 2", "Season 3","Season 2"),
+  season_num = c(2, 2, 3, 2),
+  season_year = c(2021, 2021, 2022, 2022),
+  premiere_date = c(as.Date("2021-08-06"),as.Date("2021-10-14"), as.Date("2022-07-14"), as.Date("2022-07-30")),
+  finale_date = c(as.Date("2021-09-24"), as.Date("2021-12-16"), NA, NA),
+  link_wiki = c("https://en.wikipedia.org/wiki/Drag_Race_Holland_(season_2)","https://en.wikipedia.org/wiki/Canada%27s_Drag_Race_(season_2)","https://en.wikipedia.org/wiki/Canada%27s_Drag_Race_(season_3)","https://en.wikipedia.org/wiki/RuPaul%27s_Drag_Race_Down_Under_(season_2)"),
+  link_fandom = c("https://rupaulsdragrace.fandom.com/wiki/Drag_Race_Holland_(Season_2)","https://rupaulsdragrace.fandom.com/wiki/Canada%27s_Drag_Race_(Season_2)","https://rupaulsdragrace.fandom.com/wiki/Canada%27s_Drag_Race_(Season_3)","https://rupaulsdragrace.fandom.com/wiki/RuPaul%27s_Drag_Race_Down_Under_(Season_2)")
+)
+
+df_season<-rbind(df_season, missing)|>arrange(franchise_id)
 
 #Save Data
 write.csv(df_franchise, "../data/franchise.csv", row.names=FALSE)
