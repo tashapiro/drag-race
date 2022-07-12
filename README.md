@@ -27,10 +27,10 @@ Below details the most recent updates per franchise. Datasets will be refreshed 
 |   Drag Race Italia                          |   Italy                   |   1     |                                                      |
 |   RuPaul's Drag Race: UK vs the World       |   Global                  |   1     |                                                      |
 |   Drag Race France                          |   France                  | 1       | S1 in progress, data incomplete |
-|   Drag Race Philippines                     |   Philippines             |   -     | Not yet aired, data not collected for most tables    |
-|   Canada's Drag Race: Canada vs. the World  |   Global                  |   -     | Not yet aired, data not collected for most tables    |
-|   Drag Race Belgique                        |   Belgium                 | -       | Not yet aired, data not collected for most tables    |
-|   Drag Race Sverige                         |   Sweden                  | -       | Not yet aired, data not collected for most tables    |
+|   Drag Race Philippines                     |   Philippines             |   -     | Not yet aired, data not collected     |
+|   Canada's Drag Race: Canada vs. the World  |   Global                  |   -     | Not yet aired, data not collected   |
+|   Drag Race Belgique                        |   Belgium                 | -       | Not yet aired, data not collected    |
+|   Drag Race Sverige                         |   Sweden                  | -       | Not yet aired, data not collected    |
 
 ## Data Collection
 
