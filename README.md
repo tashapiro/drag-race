@@ -100,11 +100,11 @@ Drag...but make it like sports. I used **[reactablefmtr](https://kcuilla.github.
 
 
 ### Where in The World Are You Queen?
-Where are the queens originally from? I used data from each contestant's original season and used the hometown information to plot the location of each queen. I used **tidygeocoder** to produce the lat/long coordinates for each hometown, and used **leafletR** (Leaflet wrapper) to generate the map. It's pretty cool to see how Ru's family footprint has expanded around the world - you can find queens in North America, South America, Europe, Asia, and Australia!
+Where are the queens originally from? I used **tidygeocoder** to produce the geo coordinates for each hometown, and used **leafletR** (Leaflet wrapper) to generate the map. It's pretty cool to see how Ru's family footprint has expanded around the world - you can find a queen in almost every continent!
 
-:round_pushpin: [Find a Queen](https://tashapiro.github.io/drag-race/code/map-queens)
+:round_pushpin: [Find a Queen](https://www.tanyashapiro.com/interactive-visuals/map-drag-queens)
 <br></br>
-![plot](./images/map-queens-usa.png)
+![plot](./images/map-queens-global.png)
 
 ### Drag Race HERStory - Lip Syncs
 Analysis of all lip sync songs featured on different seasons of Drag Race across all franchises. 
