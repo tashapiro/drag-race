@@ -95,7 +95,7 @@ Below is a snapshot of ERD used to organize information collected from various o
 
 ### Drag NetWerk
 
-I wanted to explore the relationships among contestants across different international franchises and seasons. The analysis includes contestants from region specific franchises - UK, Canada, Holland, España, Italia, and France - and includes cross-overs from RuPaul’s global “Drag vs. The World” spin-offs, e.g. Canada’s Drag Race vs. The World. The network graph was produced using **ggplot** and **GGally**. 
+I wanted to explore the relationships among contestants across different international franchises and seasons. The analysis includes contestants from region specific franchises - UK, Canada, Holland, España, Italia, and France - and includes cross-overs from RuPaul’s global “Drag vs. The World” spin-offs, e.g. Canada’s Drag Race vs. The World. The network graph was produced using **ggplot** , **ggimage**, and **GGally**. 
 
 ![plot](./images/plots/drag-netwerk-all.png)
 
