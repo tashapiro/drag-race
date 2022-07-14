@@ -117,6 +117,12 @@ Analysis of all lip sync songs featured on different seasons of Drag Race across
 <br/><br/>
 ![plot](./images/plots/song-herstory.png)
 
+
+### Lip Sync For Your Legacy (All Stars S2) 
+To explore Spotify Audio features of different songs, I concentrated on lip syncs featured on RuPaul's All Stars Season 2. Graph rendered using R ggplot, ggimage, ggtext, and geom_textpath. The image was then exported and modified in Adobe Photoshop to center the final facet row.
+
+![plot](./images/plots/lip-syncs-allstars-s2.png)
+
 ### RuPaul's Lip Sync Palooza (Spotify Playlist)
 
 In addition to producing visuals, I wanted to make a master playlist of all lip sync songs featured on various episodes of Drag Race. Using lip sync data collected from different season Wikipedias, I then used spotifyR to lookup their respective Spotify track IDs and add them to my own playlist. The result - I now have 300+ songs and 20+hrs worth of listening time to shuffle through! 
