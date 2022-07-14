@@ -92,12 +92,18 @@ Below is a snapshot of ERD used to organize information collected from various o
 
 ## Visualizations & Applications
 
+
+### Drag NetWerk
+
+I wanted to explore the relationships among contestants across different international franchises and seasons. The analysis includes contestants from region specific franchises - UK, Canada, Holland, España, Italia, and France - and includes cross-overs from RuPaul’s global “Drag vs. The World” spin-offs, e.g. Canada’s Drag Race vs. The World. The network graph was produced using **ggplot** and **GGally**. 
+
+![plot](./images/plots/drag-netwerk-all.png)
+
 ### RuPaul's Drag Queens
 
 Drag...but make it like sports. I used **[reactablefmtr](https://kcuilla.github.io/reactablefmtr/)** to generate an HTML table detailing information on season contestants and their respective outcomes. The interactive version is hosted [here](https://www.tanyashapiro.com/interactive-visuals/rpdr) on my site.
 <br/><br/>
 ![plot](./images/plots/reactable-drag-queens.png)
-
 
 ### Where in The World Are You Queen?
 Where are the queens originally from? I used **tidygeocoder** to produce the geo coordinates for each hometown, and used **leafletR** (Leaflet wrapper) to generate the map. It's pretty cool to see how Ru's family footprint has expanded around the world - you can find a queen in almost every continent!
