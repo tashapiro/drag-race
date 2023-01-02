@@ -115,7 +115,7 @@ Where are the queens originally from? I used **tidygeocoder** to produce the geo
 ### Drag Race HERStory - Lip Syncs
 Analysis of all lip sync songs featured on different seasons of Drag Race across all franchises. 
 <br/><br/>
-![plot](./images/plots/song-herstory.png)
+![plot](./images/plots/lip-sync-herstory.png)
 
 
 ### Lip Sync For Your Legacy (All Stars S2) 
